@@ -16,12 +16,12 @@ dotenv.config();
 
 // database connection
 mongoose
-    .connect(process.env.MONGO_CONNECTION, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log("Connection success!"))
-    .catch((err) => console.log("nahid", err));
+	.connect(process.env.MONGO_CONNECTION, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => console.log("Connection success!"))
+	.catch((err) => console.log(err));
 
 // request parser
 app.use(express.json());
@@ -48,5 +48,5 @@ app.use(notFroundHandler);
 app.use(errorHanlder);
 
 app.listen(process.env.PORT, () => {
-    console.log(`listening to port ${process.env.PORT}`);
+	console.log(`listening to port ${process.env.PORT}`);
 });
