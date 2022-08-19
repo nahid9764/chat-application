@@ -14,7 +14,10 @@ const addUserValidators = [
         .withMessage("Name is Required!")
         .isAlpha("en-us", { ignore: " -" })
         .withMessage("Name must not contain anything other than alphabet")
-        .trim(),
+        .trim()
+        .custom(() => {
+            console.log("nahid2");
+        }),
     check("email")
         .isEmail()
         .withMessage("Invalid email address")
@@ -53,6 +56,7 @@ const addUserValidators = [
 ];
 
 const addUserValidationHandler = (req, res, next) => {
+    console.log("user Validator Error");
     const err = validationResult(req);
     const mappedErrors = err.mapped();
     if (Object.keys(mappedErrors).length === 0) {

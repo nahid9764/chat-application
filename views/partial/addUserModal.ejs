@@ -35,7 +35,6 @@
         <script>
             const modal = document.querySelector("#add-user-modal");
             const form = document.querySelector("#add-user-form")
-            console.log(form);
 
             function closeModal() {
                 modal.style.display = "none";
@@ -54,17 +53,25 @@
                     errTags[i].style.display = "none";
                 }
 
-                //prepare the form data
-                const formData = new FromData(form);
+                const inputErr = document.querySelectorAll('input.error');
+                if(inputErr.length > 0){
+                    for(let i=0; i<inputErr.length; i++){
+                        inputErr[i].classList.remove('error')
+                    }
+                }
 
+                //prepare the form data
+                const formData = new FormData(form);
                 // send the request to server 
-                let response = await fetch("/user", {
+                let response = await fetch("/users", {
                     method: "POST",
                     body: formData
                 });
 
                 // get respons 
                 let result = await response.json();
+
+                console.log({result})
 
                 // handle error and response
                 if(result.errors){
@@ -81,15 +88,15 @@
                     });
                 } else {
                     // success
-                    Toastify({text:"User was added successfully! Reloading the list...",
-                        duratiaon:1000,
-                    }).showToast();
-                    closeModal();
-                    document.querySelector("p.error").style.display = "none";
+                    // Toastify({text:"User was added successfully! Reloading the list...",
+                    //     duratiaon:1000,
+                    // }).showToast();
+                    // closeModal();
+                    // document.querySelector("p.error").style.display = "none";
 
-                    setTimeout(()=>{
-                        location.reload();
-                    }, 1000)
+                    // setTimeout(()=>{
+                    //     location.reload();
+                    // }, 1000)
                 }
              }
         </script>

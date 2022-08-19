@@ -21,7 +21,7 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => console.log("Connection success!"))
-    .catch((err) => console.log(err));
+    .catch((err) => console.log("nahid", err));
 
 // request parser
 app.use(express.json());

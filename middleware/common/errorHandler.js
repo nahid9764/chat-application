@@ -12,7 +12,7 @@ function errorHanlder(err, req, res, next) {
 
     if (res.locals.html) {
         // html response
-        res.render("err", {
+        res.render("error", {
             title: "Error page",
         });
     } else {
