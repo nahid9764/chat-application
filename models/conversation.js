@@ -7,7 +7,6 @@ const conversationSchema = mongoose.Schema(
 			name: String,
 			avatar: String,
 		},
-
 		participant: {
 			id: mongoose.Types.ObjectId,
 			name: String,
