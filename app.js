@@ -12,7 +12,12 @@ const usersRouter = require("./router/usersRouter");
 const inboxRouter = require("./router/inboxRouter");
 
 const app = express();
+const server = http.createServer(app);
 dotenv.config();
+
+// socket creation
+const io = require("socket.io");
+global.io = io;
 
 // database connection
 mongoose

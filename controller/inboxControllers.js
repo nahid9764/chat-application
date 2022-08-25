@@ -123,8 +123,67 @@ async function getMessages(req, res, next) {
 async function sendMessage(req, res, next) {
 	if (req.body.message || (req.files && req.files.length > 0)) {
 		try {
-			// save message text/attachem
-		} catch (err) {}
+			// save message text/attachem in database
+			let attachment = null;
+			if (req.files && req.files.length > 0) {
+				attachment = [];
+				req.files.forEach((file) => {
+					attachment.push(file.filename);
+				});
+			}
+
+			const newMessage = new Message({
+				text: req.body.message,
+				attachment: attachment,
+				sender: {
+					id: req.user.userid,
+					name: req.user.username,
+					avatar: req.user.avatar || null,
+				},
+				receiver: {
+					id: req.body.receiverId,
+					name: req.body.receiverName,
+					avatar: req.body.avatar || null,
+				},
+				connversation_id: req.body.conversationId,
+			});
+
+			const result = await newMessage.save();
+
+			// emit socket event
+			global.io.emit("new_message", {
+				message: {
+					connversation_id: req.body.conversationId,
+					sender: {
+						id: req.user.userid,
+						name: req.user.username,
+						avatar: req.user.avatar || null,
+					},
+					message: req.body.message,
+					attachment: attachment,
+					date_time: result.date_time,
+				},
+			});
+
+			res.status(200).json({
+				message: "Successful!",
+				data: result,
+			});
+		} catch (err) {
+			res.status(500).json({
+				errors: {
+					common: {
+						msg: err.message,
+					},
+				},
+			});
+		}
+	} else {
+		res.status(500).json({
+			errors: {
+				common: "message text or attachment is required!",
+			},
+		});
 	}
 }
 async function attachmentUpload(req, res, next) {}
