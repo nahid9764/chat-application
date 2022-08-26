@@ -11,12 +11,12 @@ const { addUserValidators, addUserValidationHandler } = require("../middleware/u
 const router = express.Router();
 
 // users page
-router.get("/", checkLogin, getUsers);
+router.get("/allUsers", checkLogin, getUsers);
 
 // add user
-router.post("/", checkLogin, avatarUpload, addUserValidators, addUserValidationHandler, addUser);
+router.post("/create-account", checkLogin, avatarUpload, addUserValidators, addUserValidationHandler, addUser);
 
 // delete user
-router.delete("/:id", checkLogin, deleteUser);
+router.delete("/delete-user/:id", checkLogin, deleteUser);
 
 module.exports = router;

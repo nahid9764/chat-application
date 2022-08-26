@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 const cookiesPareser = require("cookie-parser");
+const http = require("http");
 
 // internal imports
 const { notFroundHandler, errorHanlder } = require("./middleware/common/errorHandler");

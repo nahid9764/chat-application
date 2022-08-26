@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/", decorateHtmlRes("Login"), getLogin);
 
 // process login
-router.post("/", loginValidators, loginValidationHandler, login);
+router.post("/login", loginValidators, loginValidationHandler, login);
 
 // logout
 router.delete("/logout", logout);
