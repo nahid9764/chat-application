@@ -1,8 +1,8 @@
 const Conversation = require("../models/Conversation");
-const escape = require("../utils/escsape");
 const User = require("../models/People");
 const createHttpError = require("http-errors");
 const Message = require("../models/Message");
+const { escape, getStandardResponse } = require("../utils/helpers");
 
 // get inbox page
 async function getInbox(req, res, next) {
@@ -44,18 +44,17 @@ async function searchUser(req, res, next) {
 				"name avatar"
 			);
 
-			res.json(users);
+			res.json(getStandardResponse(true, "", { users }));
 		} else {
 			throw createHttpError("You must provide some text to search!");
 		}
 	} catch (err) {
-		res.status(500).json({
-			errors: {
-				common: {
-					msg: err.message,
-				},
+		const errors = {
+			common: {
+				msg: err.message,
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 
@@ -77,17 +76,14 @@ async function addConversation(req, res, next) {
 
 		const result = await newConversation.save();
 
-		res.status(200).json({
-			message: "Conversation was added successfully!",
-		});
+		res.status(200).json(getStandardResponse(true, "Conversation was added successfully!", null));
 	} catch (err) {
-		res.status(500).json({
-			errors: {
-				common: {
-					msg: err.message,
-				},
+		const errors = {
+			common: {
+				msg: err.message,
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 
@@ -100,22 +96,21 @@ async function getMessages(req, res, next) {
 
 		const { participant } = await Conversation.findById(req.params.connversation_id);
 
-		res.status(200).json({
-			data: {
-				messages,
-				participant,
-			},
+		const data = {
+			messages,
+			participant,
 			user: req.user.userid,
 			connversation_id: req.params.connversation_id,
-		});
+		};
+
+		res.status(200).json(getStandardResponse(true, "", data));
 	} catch (err) {
-		res.status(500).json({
-			errors: {
-				common: {
-					msg: "Unknows error occured!",
-				},
+		const errors = {
+			common: {
+				msg: err.message,
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 
@@ -165,25 +160,22 @@ async function sendMessage(req, res, next) {
 				},
 			});
 
-			res.status(200).json({
-				message: "Successful!",
-				data: result,
-			});
+			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
-			res.status(500).json({
-				errors: {
-					common: {
-						msg: err.message,
-					},
+			const errors = {
+				common: {
+					msg: err.message,
 				},
-			});
+			};
+			res.status(500).json(getStandardResponse(false, "An error occured!", { errors }));
 		}
 	} else {
-		res.status(500).json({
-			errors: {
-				common: "message text or attachment is required!",
+		const errors = {
+			common: {
+				msg: "Message text or attachment is required!",
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 async function attachmentUpload(req, res, next) {}

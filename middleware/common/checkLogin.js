@@ -1,16 +1,15 @@
 const createHttpError = require("http-errors");
 const jwt = require("jsonwebtoken");
+const { getStandardResponse } = require("../../utils/helpers");
 
 const checkLogin = (req, res, next) => {
-	console.log(req.signedCookies);
-	let cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null;
-	console.log({ cookies });
-	if (cookies) {
+	let token = Object.keys(req.headers.authorization).length > 0 ? req.headers.authorization : null;
+
+	if (token) {
 		try {
-			const token = cookies[process.env.COOKIE_NAME];
+			// const token = cookies[process.env.COOKIE_NAME];
 			const decoded = jwt.verify(token, process.env.JWT_SECRET);
 			req.user = decoded;
-
 			// pass user info to response locals
 			if (res.locals.html) {
 				res.locals.loggedInUser = decoded;
@@ -20,33 +19,31 @@ const checkLogin = (req, res, next) => {
 			if (res.locals.html) {
 				res.redirect("/");
 			} else {
-				res.status(500).json({
-					errors: {
-						common: {
-							msg: "Authentication failed!",
-						},
+				const errors = {
+					common: {
+						msg: "Authentication failed!",
 					},
-				});
+				};
+				res.status(401).json(getStandardResponse(false, "Authentication failed!", { errors }));
 			}
 		}
 	} else {
 		if (res.locals.html) {
 			res.redirect("/");
 		} else {
-			res.status(401).json({
-				errors: {
-					common: {
-						msg: "Authentication failed!",
-					},
+			const errors = {
+				common: {
+					msg: "Authentication failed!",
 				},
-			});
+			};
+			res.status(401).json(getStandardResponse(false, "Authentication failed!", { errors }));
 		}
 	}
 };
 
 // redirect already logged in user to inbox pabe
 const redirectLoggedIn = function (req, res, next) {
-	let cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null;
+	let cookies = Object.keys(req.headers.authorization).length > 0 ? req.headers.authorization : null;
 
 	if (!cookies) {
 		next();
@@ -64,13 +61,12 @@ function requireRole(role) {
 			if (res.locals.html) {
 				next(createHttpError(401, "You are not authorized to access this page!"));
 			} else {
-				res.status(401).json({
-					errors: {
-						common: {
-							msg: "You are not authorized!",
-						},
+				const errors = {
+					common: {
+						msg: "You are not authorized!",
 					},
-				});
+				};
+				res.json(getStandardResponse(false, "You are not authorized!", { errors }));
 			}
 		}
 	};

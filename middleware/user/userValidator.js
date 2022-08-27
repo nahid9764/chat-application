@@ -6,6 +6,7 @@ const { unlink } = require("fs");
 
 //internal imports
 const User = require("../../models/People");
+const { getStandardResponse } = require("../../utils/helpers");
 
 // add user
 const addUserValidators = [
@@ -67,9 +68,11 @@ const addUserValidationHandler = (req, res, next) => {
 		}
 
 		// response the errors
-		res.status(500).json({
-			errors: mappedErrors,
-		});
+		res.status(500).json(
+			getStandardResponse(false, "An error occured!", {
+				errors: mappedErrors,
+			})
+		);
 	}
 };
 module.exports = {

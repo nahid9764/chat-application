@@ -1,3 +1,4 @@
+const { getStandardResponse } = require("../../utils/helpers");
 const uploader = require("../../utils/singleUploader");
 
 function avatarUpload(req, res, next) {
@@ -11,13 +12,12 @@ function avatarUpload(req, res, next) {
 	// call the middleware function
 	upload.any()(req, res, (err) => {
 		if (err) {
-			res.status(500).json({
-				errors: {
-					avatar: {
-						msg: err.message,
-					},
+			const errors = {
+				avatar: {
+					msg: err.message,
 				},
-			});
+			};
+			res.status(500).json(getStandardResponse(false, "Authentication failed!", { errors }));
 		} else {
 			next();
 		}

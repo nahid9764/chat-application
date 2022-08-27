@@ -5,16 +5,12 @@ const path = require("path");
 
 // internal imports
 const User = require("../models/People");
+const { getStandardResponse } = require("../utils/helpers");
 
-// get login page
 async function getUsers(req, res, next) {
-	// res.render("users");
 	try {
 		const users = await User.find();
-		res.send(users);
-		// res.render("users", {
-		// 	users,
-		// });
+		res.status(200).json(getStandardResponse(true, "", { users }));
 	} catch (err) {
 		next(err);
 	}
@@ -41,17 +37,14 @@ async function addUser(req, res, next) {
 	// save user or send error
 	try {
 		const result = await newUser.save();
-		res.status(200).json({
-			message: "User was added successfully!",
-		});
+		res.status(200).json(getStandardResponse(true, "User added successfully!", result));
 	} catch (err) {
-		res.status(500).json({
-			errors: {
-				common: {
-					msg: "Unknown error occured!",
-				},
+		const errors = {
+			common: {
+				msg: err.message,
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 
@@ -65,17 +58,14 @@ async function deleteUser(req, res, next) {
 			});
 		}
 
-		res.status(200).json({
-			message: "User was removed successfully!",
-		});
+		res.status(200).json(getStandardResponse(true, "User Deleted Successfully!", {}));
 	} catch (error) {
-		res.status(500).json({
-			errors: {
-				common: {
-					msg: "Could not delete the user!",
-				},
+		const errors = {
+			common: {
+				msg: "Could not delete the user!",
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 

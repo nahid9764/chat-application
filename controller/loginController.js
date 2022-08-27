@@ -3,6 +3,7 @@ const User = require("../models/People");
 const bcrypt = require("bcrypt");
 const jtw = require("jsonwebtoken");
 const createError = require("http-errors");
+const { getStandardResponse } = require("../utils/helpers");
 
 // get login page
 function getLogin(req, res, next) {
@@ -23,6 +24,7 @@ async function login(req, res, next) {
 			if (isValidPss) {
 				// prepare the user object to generate token
 				const userObj = {
+					id: user._id,
 					name: user.name,
 					mobile: user.mobile,
 					email: user.email,
@@ -40,7 +42,7 @@ async function login(req, res, next) {
 
 				// set logged in user local identifier
 				res.locals.loggedInUser = userObj;
-				res.send(userObj);
+				res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
 			} else {
 				throw createError("Invalid Password!");
 			}
@@ -48,13 +50,28 @@ async function login(req, res, next) {
 			throw createError("No user id found!");
 		}
 	} catch (err) {
-		res.send({
-			errors: {
-				common: {
-					msg: err.message,
-				},
+		const errors = {
+			common: {
+				msg: err.message,
 			},
-		});
+		};
+		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
+	}
+}
+
+function verifyUserByCookie(req, res) {
+	if (req.user) {
+		const { id, name, mobile, email, role } = req.user;
+		const userObj = {
+			id,
+			name,
+			mobile,
+			email,
+			role,
+		};
+
+		const token = jtw.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
+		res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
 	}
 }
 
@@ -66,5 +83,6 @@ function logout(req, res) {
 module.exports = {
 	getLogin,
 	login,
+	verifyUserByCookie,
 	logout,
 };
