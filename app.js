@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const cookiesPareser = require("cookie-parser");
 const http = require("http");
+const cors = require("cors");
 
 // internal imports
 const { notFroundHandler, errorHanlder } = require("./middleware/common/errorHandler");
@@ -13,6 +14,7 @@ const usersRouter = require("./router/usersRouter");
 const inboxRouter = require("./router/inboxRouter");
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 dotenv.config();
 
