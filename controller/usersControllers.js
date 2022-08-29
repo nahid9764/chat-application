@@ -37,6 +37,7 @@ async function addUser(req, res, next) {
 	// save user or send error
 	try {
 		const result = await newUser.save();
+		delete result?.password;
 		res.status(200).json(getStandardResponse(true, "User added successfully!", result));
 	} catch (err) {
 		const errors = {

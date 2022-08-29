@@ -69,7 +69,7 @@ const addUserValidationHandler = (req, res, next) => {
 
 		// response the errors
 		res.status(500).json(
-			getStandardResponse(false, "An error occured!", {
+			getStandardResponse(false, "Failed to create user!", {
 				errors: mappedErrors,
 			})
 		);
