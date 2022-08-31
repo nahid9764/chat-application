@@ -1,8 +1,5 @@
 const Conversation = require("../models/Conversation");
-const User = require("../models/People");
-const createHttpError = require("http-errors");
 const Message = require("../models/Message");
-const { escape, getStandardResponse } = require("../utils/helpers");
 
 // get inbox page
 async function getInbox(req, res, next) {
@@ -13,48 +10,6 @@ async function getInbox(req, res, next) {
 		res.send(conversations);
 	} catch (err) {
 		next(err);
-	}
-}
-
-// serach user
-async function searchUser(req, res, next) {
-	const user = req.body.user;
-	const searchQuery = user.replace("+88", "");
-
-	const name_search_regex = new RegExp(escape(serchQuery), "i");
-	const mobile_search_regex = new RegExp("^" + escape("+88" + searchQuery));
-	const email_search_regex = new RegExp("^" + escape("+88" + searchQuery) + "$", "i");
-
-	try {
-		if (searchQuery !== "") {
-			const users = await User.find(
-				{
-					$or: [
-						{
-							name: name_search_regex,
-						},
-						{
-							mobile: mobile_search_regex,
-						},
-						{
-							email: email_search_regex,
-						},
-					],
-				},
-				"name avatar"
-			);
-
-			res.json(getStandardResponse(true, "", { users }));
-		} else {
-			throw createHttpError("You must provide some text to search!");
-		}
-	} catch (err) {
-		const errors = {
-			common: {
-				msg: err.message,
-			},
-		};
-		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
 
@@ -182,7 +137,6 @@ async function attachmentUpload(req, res, next) {}
 
 module.exports = {
 	getInbox,
-	searchUser,
 	addConversation,
 	getMessages,
 	sendMessage,

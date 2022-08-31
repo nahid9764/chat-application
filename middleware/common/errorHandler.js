@@ -18,7 +18,7 @@ function errorHanlder(err, req, res, next) {
 		});
 	} else {
 		// json response
-		res.json(getStandardResponse(false, "An error occured", res.locals.error));
+		res.json(getStandardResponse(false, "An error occured from error handler !", { errors: res.locals.error }));
 	}
 }
 module.exports = { notFroundHandler, errorHanlder };

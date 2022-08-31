@@ -60,15 +60,14 @@ const addUserValidationHandler = (req, res, next) => {
 		next();
 	} else {
 		// remove uploaded file
-		if (req.files.length > 0) {
+		if (req?.files?.length > 0) {
 			const { filename } = req.files[0];
 			unlink(path.join(__dirname, `/../public/uploads/avatar/${filename}`), (err) => {
 				if (err) console.log(err);
 			});
 		}
-
 		// response the errors
-		res.status(500).json(
+		res.status(404).json(
 			getStandardResponse(false, "Failed to create user!", {
 				errors: mappedErrors,
 			})
