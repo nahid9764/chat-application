@@ -3,15 +3,14 @@ const jwt = require("jsonwebtoken");
 const { getStandardResponse } = require("../../utils/helpers");
 
 const checkLogin = (req, res, next) => {
-	let token = Object.keys(req.headers.authorization).length > 0 ? req.headers.authorization : null;
-
+	let token = req?.headers?.authorization ? req?.headers?.authorization : null;
 	if (token) {
 		try {
 			// const token = cookies[process.env.COOKIE_NAME];
 			const decoded = jwt.verify(token, process.env.JWT_SECRET);
 			req.user = decoded;
 			// pass user info to response locals
-			if (res.locals.html) {
+			if (res?.locals?.html) {
 				res.locals.loggedInUser = decoded;
 			}
 			next();
@@ -43,9 +42,9 @@ const checkLogin = (req, res, next) => {
 
 // redirect already logged in user to inbox pabe
 const redirectLoggedIn = function (req, res, next) {
-	let cookies = Object.keys(req.headers.authorization).length > 0 ? req.headers.authorization : null;
+	let token = req?.headers?.authorization ? req?.headers?.authorization : null;
 
-	if (!cookies) {
+	if (!token) {
 		next();
 	} else {
 		res.redirect("/inbox");

@@ -56,7 +56,7 @@ async function searchUser(req, res, next) {
 	const user = req.body.user;
 	const searchQuery = user.replace("+88", "");
 
-	const name_search_regex = new RegExp(escape(serchQuery), "i");
+	const name_search_regex = new RegExp(escape(searchQuery), "i");
 	const mobile_search_regex = new RegExp("^" + escape("+88" + searchQuery));
 	const email_search_regex = new RegExp("^" + escape("+88" + searchQuery) + "$", "i");
 

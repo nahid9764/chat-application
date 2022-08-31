@@ -4,7 +4,6 @@ const express = require("express");
 //internal import
 const {
 	getInbox,
-	searchUser,
 	addConversation,
 	getMessages,
 	attachmentUpload,
