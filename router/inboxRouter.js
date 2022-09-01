@@ -3,7 +3,7 @@ const express = require("express");
 
 //internal import
 const {
-	getInbox,
+	getConversationLists,
 	addConversation,
 	getMessages,
 	attachmentUpload,
@@ -14,8 +14,8 @@ const decorateHtmlRes = require("../middleware/common/decorateHtmlRes");
 
 const router = express.Router();
 
-// inbox page
-router.get("/", decorateHtmlRes("Inbox"), checkLogin, getInbox);
+// get conversations
+router.get("/getConversationLists", decorateHtmlRes("Inbox"), checkLogin, getConversationLists);
 
 // add conversation
 router.post("/addConversation", checkLogin, addConversation);

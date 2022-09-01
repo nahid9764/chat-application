@@ -7,11 +7,15 @@ const path = require("path");
 const User = require("../models/People");
 const createHttpError = require("http-errors");
 const { escape, getStandardResponse } = require("../utils/helpers");
+const Conversation = require("../models/Conversation");
 
-async function getUsers(req, res, next) {
+// get user conversation
+async function getUserConversation(req, res, next) {
 	try {
-		const users = await User.find();
-		res.status(200).json(getStandardResponse(true, "", { users }));
+		const conversations = await Conversation.find({
+			$or: [{ "creator.id": req.user.id }, { "participant.id": req.user.id }],
+		});
+		res.status(200).json(getStandardResponse(true, "", { conversations }));
 	} catch (err) {
 		next(err);
 	}
@@ -76,7 +80,7 @@ async function searchUser(req, res, next) {
 						},
 					],
 				},
-				"name avatar"
+				"name avatar mobile"
 			);
 
 			res.json(getStandardResponse(true, "", { users }));
@@ -115,7 +119,7 @@ async function deleteUser(req, res, next) {
 }
 
 module.exports = {
-	getUsers,
+	getUserConversation,
 	addUser,
 	searchUser,
 	deleteUser,

@@ -1,13 +1,15 @@
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
+const { getStandardResponse } = require("../utils/helpers");
 
 // get inbox page
-async function getInbox(req, res, next) {
+async function getConversationLists(req, res, next) {
 	try {
 		const conversations = await Conversation.find({
-			$or: [{ "creator.id": req.user.userid }, { "participant.id": req.user.userid }],
+			$or: [{ "creator.id": req.user.id }, { "participant.id": req.user.id }],
 		});
-		res.send(conversations);
+		console.log(conversations);
+		res.status(200).json(getStandardResponse(true, "", conversations));
 	} catch (err) {
 		next(err);
 	}
@@ -18,17 +20,18 @@ async function addConversation(req, res, next) {
 	try {
 		const newConversation = new Conversation({
 			creator: {
-				id: req.user.userid,
-				name: req.user.username,
+				id: req.user.id,
+				name: req.user.name,
+				mobile: req.user.mobile,
 				avatar: req.user.avatar || null,
 			},
 			participant: {
 				id: req.body.id,
-				name: req.body.participant,
+				name: req.body.name,
+				mobile: req.body.mobile,
 				avatar: req.body.avatar || null,
 			},
 		});
-
 		const result = await newConversation.save();
 
 		res.status(200).json(getStandardResponse(true, "Conversation was added successfully!", null));
@@ -38,7 +41,7 @@ async function addConversation(req, res, next) {
 				msg: err.message,
 			},
 		};
-		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
+		res.status(500).json(getStandardResponse(false, "Failed to add conversation!", { errors }));
 	}
 }
 
@@ -54,7 +57,7 @@ async function getMessages(req, res, next) {
 		const data = {
 			messages,
 			participant,
-			user: req.user.userid,
+			user: req.user.id,
 			connversation_id: req.params.connversation_id,
 		};
 
@@ -86,7 +89,7 @@ async function sendMessage(req, res, next) {
 				text: req.body.message,
 				attachment: attachment,
 				sender: {
-					id: req.user.userid,
+					id: req.user.id,
 					name: req.user.username,
 					avatar: req.user.avatar || null,
 				},
@@ -105,7 +108,7 @@ async function sendMessage(req, res, next) {
 				message: {
 					connversation_id: req.body.conversationId,
 					sender: {
-						id: req.user.userid,
+						id: req.user.id,
 						name: req.user.username,
 						avatar: req.user.avatar || null,
 					},
@@ -136,7 +139,7 @@ async function sendMessage(req, res, next) {
 async function attachmentUpload(req, res, next) {}
 
 module.exports = {
-	getInbox,
+	getConversationLists,
 	addConversation,
 	getMessages,
 	sendMessage,
