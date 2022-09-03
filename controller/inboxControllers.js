@@ -1,6 +1,7 @@
+const { mongo } = require("mongoose");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
-const { getStandardResponse } = require("../utils/helpers");
+const { getStandardResponse, generateConversationId } = require("../utils/helpers");
 
 // get inbox page
 async function getConversationLists(req, res, next) {
@@ -8,7 +9,6 @@ async function getConversationLists(req, res, next) {
 		const conversations = await Conversation.find({
 			$or: [{ "creator.id": req.user.id }, { "participant.id": req.user.id }],
 		});
-		console.log(conversations);
 		res.status(200).json(getStandardResponse(true, "", conversations));
 	} catch (err) {
 		next(err);
@@ -18,23 +18,40 @@ async function getConversationLists(req, res, next) {
 // add Conversation
 async function addConversation(req, res, next) {
 	try {
-		const newConversation = new Conversation({
-			creator: {
-				id: req.user.id,
-				name: req.user.name,
-				mobile: req.user.mobile,
-				avatar: req.user.avatar || null,
-			},
-			participant: {
-				id: req.body.id,
-				name: req.body.name,
-				mobile: req.body.mobile,
-				avatar: req.body.avatar || null,
-			},
-		});
-		const result = await newConversation.save();
+		const customId = generateConversationId(req.user.id, req.body.id);
+		const isExistBefore = await Conversation.findById(customId);
+		let result;
 
-		res.status(200).json(getStandardResponse(true, "Conversation was added successfully!", null));
+		if (isExistBefore) {
+			result = isExistBefore;
+		} else {
+			const customId2 = generateConversationId(req.body.id, req.user.id);
+			const isExistBefore2 = await Conversation.findById(customId2);
+
+			if (isExistBefore2) {
+				result = isExistBefore2;
+			} else {
+				const newConversation = new Conversation({
+					_id: mongo.ObjectId(customId),
+					creator: {
+						id: req.user.id,
+						name: req.user.name,
+						mobile: req.user.mobile,
+						avatar: req.user.avatar || null,
+					},
+					participant: {
+						id: req.body.id,
+						name: req.body.name,
+						mobile: req.body.mobile,
+						avatar: req.body.avatar || null,
+					},
+				});
+
+				result = await newConversation.save();
+			}
+		}
+
+		res.status(200).json(getStandardResponse(true, "Conversation was added successfully!", result));
 	} catch (err) {
 		const errors = {
 			common: {
@@ -49,16 +66,16 @@ async function addConversation(req, res, next) {
 async function getMessages(req, res, next) {
 	try {
 		const messages = await Message.find({
-			connversation_id: req.params.connversation_id,
-		}).sort("-createdAt");
+			conversationId: req.params.conversationId,
+		});
 
-		const { participant } = await Conversation.findById(req.params.connversation_id);
+		const conversation = await Conversation.findById(req.params.conversationId);
 
 		const data = {
 			messages,
-			participant,
-			user: req.user.id,
-			connversation_id: req.params.connversation_id,
+			participant: conversation?.participant,
+			userId: req.user.id,
+			conversationId: req.params.conversationId,
 		};
 
 		res.status(200).json(getStandardResponse(true, "", data));
@@ -84,13 +101,14 @@ async function sendMessage(req, res, next) {
 					attachment.push(file.filename);
 				});
 			}
-
+			console.log(req.body.conversationId);
 			const newMessage = new Message({
+				conversationId: req.body.conversationId,
 				text: req.body.message,
 				attachment: attachment,
 				sender: {
 					id: req.user.id,
-					name: req.user.username,
+					name: req.user.name,
 					avatar: req.user.avatar || null,
 				},
 				receiver: {
@@ -98,25 +116,12 @@ async function sendMessage(req, res, next) {
 					name: req.body.receiverName,
 					avatar: req.body.avatar || null,
 				},
-				connversation_id: req.body.conversationId,
 			});
 
 			const result = await newMessage.save();
-
+			console.log(result);
 			// emit socket event
-			global.io.emit("new_message", {
-				message: {
-					connversation_id: req.body.conversationId,
-					sender: {
-						id: req.user.id,
-						name: req.user.username,
-						avatar: req.user.avatar || null,
-					},
-					message: req.body.message,
-					attachment: attachment,
-					date_time: result.date_time,
-				},
-			});
+			global.io.emit("new_message", result);
 
 			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
@@ -136,12 +141,9 @@ async function sendMessage(req, res, next) {
 		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
 	}
 }
-async function attachmentUpload(req, res, next) {}
-
 module.exports = {
 	getConversationLists,
 	addConversation,
 	getMessages,
 	sendMessage,
-	attachmentUpload,
 };

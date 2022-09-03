@@ -6,6 +6,10 @@ function getStandardResponse(success, message, data) {
 	};
 }
 
+function generateConversationId(a, b) {
+	return a.slice(0, 12) + b.slice(-12);
+}
+
 const escape = (str) => {
 	return str.replace(/[-\/\^$*+?.()|[\]{}]/g, "\\$&");
 };
@@ -13,4 +17,5 @@ const escape = (str) => {
 module.exports = {
 	getStandardResponse,
 	escape,
+	generateConversationId,
 };

@@ -2,15 +2,10 @@
 const express = require("express");
 
 //internal import
-const {
-	getConversationLists,
-	addConversation,
-	getMessages,
-	attachmentUpload,
-	sendMessage,
-} = require("../controller/inboxControllers");
+const { getConversationLists, addConversation, getMessages, sendMessage } = require("../controller/inboxControllers");
 const { checkLogin } = require("../middleware/common/checkLogin");
 const decorateHtmlRes = require("../middleware/common/decorateHtmlRes");
+const attachmentUpload = require("../middleware/inbox/attachmentUpload");
 
 const router = express.Router();
 

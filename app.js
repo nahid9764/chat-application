@@ -6,6 +6,7 @@ const path = require("path");
 const cookiesPareser = require("cookie-parser");
 const http = require("http");
 const cors = require("cors");
+const { Server } = require("socket.io");
 
 // internal imports
 const { notFroundHandler, errorHanlder } = require("./middleware/common/errorHandler");
@@ -15,11 +16,16 @@ const inboxRouter = require("./router/inboxRouter");
 
 const app = express();
 app.use(cors());
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 dotenv.config();
 
 // socket creation
-const io = require("socket.io");
+const io = new Server(httpServer, {
+	cors: {
+		origin: "http://localhost:3000",
+		methods: ["GET", "POST"],
+	},
+});
 global.io = io;
 
 // database connection
@@ -55,6 +61,6 @@ app.use(notFroundHandler);
 // common error handler
 app.use(errorHanlder);
 
-app.listen(process.env.PORT, () => {
+httpServer.listen(process.env.PORT, () => {
 	console.log(`listening to port ${process.env.PORT}`);
 });

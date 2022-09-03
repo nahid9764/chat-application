@@ -43,7 +43,6 @@ async function addUser(req, res, next) {
 	try {
 		await newUser.save();
 		delete newUser.password;
-		console.log(newUser);
 		res.status(200).json(getStandardResponse(true, "User added successfully!", newUser));
 	} catch (err) {
 		const errors = {
