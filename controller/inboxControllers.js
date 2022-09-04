@@ -1,6 +1,7 @@
 const { mongo } = require("mongoose");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
+const { getActiveUsers } = require("../utils/activeUsers");
 const { getStandardResponse, generateConversationId } = require("../utils/helpers");
 
 // get inbox page
@@ -119,9 +120,12 @@ async function sendMessage(req, res, next) {
 			});
 
 			const result = await newMessage.save();
-			console.log(result);
 			// emit socket event
-			global.io.emit("new_message", result);
+			// global.io.emit("new_message", result);
+			//send and get message
+			const user = getActiveUsers(req.body.receiverId);
+			console.log({ user });
+			global.io.to(user.socketId).emit("new_message", result);
 
 			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
@@ -138,7 +142,7 @@ async function sendMessage(req, res, next) {
 				msg: "Message text or attachment is required!",
 			},
 		};
-		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
+		res.status(500).json(getStandardResponse(false, "Message text or attachment is required!", { errors }));
 	}
 }
 module.exports = {
