@@ -7,7 +7,6 @@ const removeFromActiveUser = (socketId) => {
 };
 
 const getActiveUsers = (userId) => {
-	console.log(global.activeUser);
 	return global.activeUser.find((user) => user.userId === userId);
 };
 

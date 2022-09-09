@@ -55,7 +55,7 @@ async function login(req, res, next) {
 				msg: err.message,
 			},
 		};
-		res.status(500).json(getStandardResponse(false, "An error occured", { errors }));
+		res.status(401).json(getStandardResponse(false, "Authentication Failed!", { errors }));
 	}
 }
 

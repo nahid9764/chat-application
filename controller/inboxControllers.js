@@ -46,6 +46,7 @@ async function addConversation(req, res, next) {
 						mobile: req.body.mobile,
 						avatar: req.body.avatar || null,
 					},
+					unseenMsgCount: 0,
 				});
 
 				result = await newConversation.save();
@@ -107,6 +108,7 @@ async function sendMessage(req, res, next) {
 				conversationId: req.body.conversationId,
 				text: req.body.message,
 				attachment: attachment,
+				isSeen: false,
 				sender: {
 					id: req.user.id,
 					name: req.user.name,
@@ -121,12 +123,12 @@ async function sendMessage(req, res, next) {
 
 			const result = await newMessage.save();
 			// emit socket event
-			// global.io.emit("new_message", result);
-			//send and get message
 			const user = getActiveUsers(req.body.receiverId);
-			console.log({ user });
-			global.io.to(user.socketId).emit("new_message", result);
+			if (user?.socketId) {
+				const r = await global.io.to(user.socketId).emit("new_message", result);
 
+				console.log("socket emited", r, { user });
+			}
 			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
 			const errors = {

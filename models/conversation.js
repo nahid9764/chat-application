@@ -14,6 +14,10 @@ const conversationSchema = mongoose.Schema(
 			avatar: String,
 			mobile: String,
 		},
+		unseenMsgCount: {
+			type: Number,
+			default: 0,
+		},
 		lastUpdate: {
 			type: Date,
 			default: Date.now,

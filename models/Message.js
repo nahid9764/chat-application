@@ -20,6 +20,10 @@ const messageSchema = mongoose.Schema(
 			type: Date,
 			default: Date.now,
 		},
+		isSeen: {
+			type: Boolean,
+			default: false,
+		},
 		conversationId: {
 			type: mongoose.Types.ObjectId,
 			require: true,
