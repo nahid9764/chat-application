@@ -15,9 +15,12 @@ const loginValidationHandler = function (req, res, next) {
 	if (Object.keys(mappedErrors).length === 0) {
 		next();
 	} else {
-		res.send({
-			errors: mappedErrors,
-		});
+		// response the errors
+		res.status(404).json(
+			getStandardResponse(false, "Failed to login!", {
+				errors: mappedErrors,
+			})
+		);
 	}
 };
 

@@ -40,6 +40,7 @@ async function addConversation(req, res, next) {
 						mobile: req.user.mobile,
 						avatar: req.user.avatar || null,
 					},
+					lastSenderId: req.user.id,
 					participant: {
 						id: req.body.id,
 						name: req.body.name,
@@ -103,7 +104,6 @@ async function sendMessage(req, res, next) {
 					attachment.push(file.filename);
 				});
 			}
-			console.log(req.body.conversationId);
 			const newMessage = new Message({
 				conversationId: req.body.conversationId,
 				text: req.body.message,
@@ -122,12 +122,12 @@ async function sendMessage(req, res, next) {
 			});
 
 			const result = await newMessage.save();
+			// update last sernder id
+			await Conversation.updateOne({ _id: req.body.conversationId }, { $set: { lastSenderId: req.user.id } });
 			// emit socket event
 			const user = getActiveUsers(req.body.receiverId);
 			if (user?.socketId) {
 				const r = await global.io.to(user.socketId).emit("new_message", result);
-
-				console.log("socket emited", r, { user });
 			}
 			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
@@ -147,9 +147,45 @@ async function sendMessage(req, res, next) {
 		res.status(500).json(getStandardResponse(false, "Message text or attachment is required!", { errors }));
 	}
 }
+
+// Update seen-unseen
+async function updateSeenUnseen(req, res, next) {
+	const { conversationId, type, msgIDs } = req.body;
+	if (conversationId && type) {
+		try {
+			const doc = await Conversation.findById(conversationId);
+			if (type === "UNSEEN") {
+				doc.unseenMsgCount = doc.unseenMsgCount + 1;
+			} else if (type === "SEEN") {
+				doc.unseenMsgCount = 0;
+				if (msgIDs.length > 0) {
+					await Message.updateMany({ _id: { $in: msgIDs } }, { $set: { isSeen: true } }, { multi: true });
+				}
+			}
+			const saveUpdate = await doc.save();
+			res.status(200).json(getStandardResponse(true, "", saveUpdate));
+		} catch (error) {
+			const errors = {
+				common: {
+					msg: error.message,
+				},
+			};
+			res.status(500).json(getStandardResponse(false, "Couldn't update!", { errors }));
+		}
+	} else {
+		const errors = {
+			common: {
+				msg: "'conversationId' and 'type' is required!",
+			},
+		};
+		res.status(500).json(getStandardResponse(false, "Proper req.body not found!", { errors }));
+	}
+}
+
 module.exports = {
 	getConversationLists,
 	addConversation,
 	getMessages,
 	sendMessage,
+	updateSeenUnseen,
 };

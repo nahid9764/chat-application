@@ -18,6 +18,7 @@ const conversationSchema = mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
+		lastSenderId: String,
 		lastUpdate: {
 			type: Date,
 			default: Date.now,
