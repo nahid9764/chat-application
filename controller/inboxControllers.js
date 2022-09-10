@@ -73,7 +73,6 @@ async function getMessages(req, res, next) {
 		});
 
 		const conversation = await Conversation.findById(req.params.conversationId);
-
 		const data = {
 			messages,
 			participant: conversation?.participant,
@@ -159,11 +158,25 @@ async function updateSeenUnseen(req, res, next) {
 			} else if (type === "SEEN") {
 				doc.unseenMsgCount = 0;
 				if (msgIDs.length > 0) {
-					await Message.updateMany({ _id: { $in: msgIDs } }, { $set: { isSeen: true } }, { multi: true });
+					const result = await Message.updateMany(
+						{ _id: { $in: msgIDs } },
+						{ $set: { isSeen: true } },
+						{ multi: true }
+					);
+					// Find Receiver Id
+					const F_R_I =
+						doc?.creator?.id.toString() === req.user.id
+							? doc?.participant?.id.toString()
+							: doc?.creator?.id.toString();
+
+					const receiver = getActiveUsers(F_R_I.toString());
+					if (receiver?.socketId) {
+						const r = await global.io.to(receiver.socketId).emit("msg_seen", req.body);
+					}
 				}
 			}
 			const saveUpdate = await doc.save();
-			res.status(200).json(getStandardResponse(true, "", saveUpdate));
+			res.status(200).json(getStandardResponse(true, "", req.body));
 		} catch (error) {
 			const errors = {
 				common: {

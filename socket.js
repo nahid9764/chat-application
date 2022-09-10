@@ -13,16 +13,13 @@ function startSocket(httpServer) {
 	global.activeUser = [];
 
 	io.on("connection", (socket) => {
-		console.log("a user connected!", socket.id);
 		//take userId and socketId from user
 		socket.on("addToActiveUsers", (userId) => {
-			console.log("addToActiveUsers", userId);
 			addToActiveUsers(userId, socket.id);
 			io.emit("getActiveUsers", global.activeUser);
 		});
 
 		socket.on("disconnect", () => {
-			console.log("a user disconnected!", socket.id);
 			removeFromActiveUser(socket.id);
 			io.emit("getActiveUsers", global.activeUser);
 		});
