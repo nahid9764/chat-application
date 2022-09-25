@@ -1,7 +1,7 @@
 // internal imports
 const User = require("../models/People");
 const bcrypt = require("bcrypt");
-const jtw = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const { getStandardResponse } = require("../utils/helpers");
 
@@ -28,11 +28,12 @@ async function login(req, res, next) {
 					name: user.name,
 					mobile: user.mobile,
 					email: user.email,
+					avatar: user.avatar || null,
 					role: "user",
 				};
 
 				// generate token
-				const token = jtw.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
+				const token = jwt.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 				// set cookie
 				res.cookie(process.env.COOKIE_NAME, token, {
 					maxAge: process.env.JWT_EXPIRY,
@@ -67,10 +68,11 @@ function verifyUserByCookie(req, res) {
 			name,
 			mobile,
 			email,
+			avatar,
 			role,
 		};
 
-		const token = jtw.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
+		const token = jwt.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 		res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
 	}
 }
