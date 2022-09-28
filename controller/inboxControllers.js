@@ -3,6 +3,7 @@ const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const { getActiveUsers } = require("../utils/activeUsers");
 const { getStandardResponse, generateConversationId } = require("../utils/helpers");
+const { uploadToGoogleDrive, authenticateGoogle, deleteFile } = require("../utils/uploadToGoogleDrive");
 
 // get inbox page
 async function getConversationLists(req, res, next) {
@@ -99,8 +100,11 @@ async function sendMessage(req, res, next) {
 			let attachment = null;
 			if (req.files && req.files.length > 0) {
 				attachment = [];
-				req.files.forEach((file) => {
-					attachment.push(file.filename);
+				const auth = authenticateGoogle();
+				req.files.forEach(async (file) => {
+					const avatarURL = await uploadToGoogleDrive(file, auth);
+					deleteFile(`attachments/${file.filename}`);
+					attachment.push(avatarURL);
 				});
 			}
 			const newMessage = new Message({

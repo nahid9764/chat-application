@@ -3,10 +3,10 @@ const uploader = require("../../utils/multipleUploader");
 function attachmentUpload(req, res, next) {
 	const upload = uploader(
 		"attachments",
-		["image/jpeg", "image/jpg", "image/png"],
+		["image/jpeg", "image/jpg", "image/png", "application/pdf"],
 		1000000,
 		2,
-		"Only .jpg, jpeg or .png format allowed!"
+		"Only .jpg, .jpeg , .png and .pdf are allowed!"
 	);
 
 	// call the middleware function
