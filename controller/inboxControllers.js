@@ -3,7 +3,12 @@ const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const { getActiveUsers } = require("../utils/activeUsers");
 const { getStandardResponse, generateConversationId } = require("../utils/helpers");
-const { uploadToGoogleDrive, authenticateGoogle, deleteFile } = require("../utils/uploadToGoogleDrive");
+const {
+	uploadToGoogleDrive,
+	authenticateGoogle,
+	deleteFileFromLocal,
+	deleteToGoogleDrive,
+} = require("../utils/uploadToGoogleDrive");
 
 // get inbox page
 async function getConversationLists(req, res, next) {
@@ -92,21 +97,70 @@ async function getMessages(req, res, next) {
 	}
 }
 
+// Upload file to google drive
+async function uploadFile(req, res, next) {
+	if (req.body.message || (req.files && req.files.length > 0)) {
+		try {
+			// save message text/attachment in database
+			let fileIds = [];
+
+			if (req.files && req.files.length > 0) {
+				const auth = authenticateGoogle();
+				for (let i = 0; i < req.files.length; i++) {
+					const result = await uploadToGoogleDrive(req.files[i], auth);
+					deleteFileFromLocal(`attachments/${req.files[i].filename}`);
+					fileIds[i] = result;
+				}
+				res.status(200).json(getStandardResponse(true, "", fileIds));
+			}
+		} catch (err) {
+			const errors = {
+				common: {
+					msg: err.message,
+				},
+			};
+			res.status(500).json(getStandardResponse(false, "An error occured!", { errors }));
+		}
+	} else {
+		const errors = {
+			common: {
+				msg: "Message text or attachment is required!",
+			},
+		};
+		res.status(500).json(getStandardResponse(false, "Message text or attachment is required!", { errors }));
+	}
+}
+async function deleteFile(req, res, next) {
+	if (req.params.id) {
+		try {
+			console.log("log-1");
+			const auth = authenticateGoogle();
+			const result = await deleteToGoogleDrive(req.params.id, auth);
+			console.log("last log");
+			res.status(200).json(getStandardResponse(true, "", result));
+		} catch (err) {
+			const errors = {
+				common: {
+					msg: err.message,
+				},
+			};
+			res.status(500).json(getStandardResponse(false, "An error occured!", { errors }));
+		}
+	} else {
+		const errors = {
+			common: {
+				msg: "Message text or attachment is required!",
+			},
+		};
+		res.status(500).json(getStandardResponse(false, "Message text or attachment is required!", { errors }));
+	}
+}
+
 // send new messages
 async function sendMessage(req, res, next) {
 	if (req.body.message || (req.files && req.files.length > 0)) {
 		try {
 			// save message text/attachem in database
-			let attachment = null;
-			if (req.files && req.files.length > 0) {
-				attachment = [];
-				const auth = authenticateGoogle();
-				req.files.forEach(async (file) => {
-					const avatarURL = await uploadToGoogleDrive(file, auth);
-					deleteFile(`attachments/${file.filename}`);
-					attachment.push(avatarURL);
-				});
-			}
 			const newMessage = new Message({
 				conversationId: req.body.conversationId,
 				text: req.body.message,
@@ -205,4 +259,6 @@ module.exports = {
 	getMessages,
 	sendMessage,
 	updateSeenUnseen,
+	uploadFile,
+	deleteFile,
 };

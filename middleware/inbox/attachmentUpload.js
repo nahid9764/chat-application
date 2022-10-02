@@ -4,7 +4,7 @@ function attachmentUpload(req, res, next) {
 	const upload = uploader(
 		"attachments",
 		["image/jpeg", "image/jpg", "image/png", "application/pdf"],
-		1000000,
+		10000000000,
 		2,
 		"Only .jpg, .jpeg , .png and .pdf are allowed!"
 	);

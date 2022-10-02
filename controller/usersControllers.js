@@ -8,7 +8,7 @@ const User = require("../models/People");
 const createHttpError = require("http-errors");
 const { escape, getStandardResponse } = require("../utils/helpers");
 const Conversation = require("../models/Conversation");
-const { authenticateGoogle, deleteFile, uploadToGoogleDrive } = require("../utils/uploadToGoogleDrive");
+const { authenticateGoogle, deleteFileFromLocal, uploadToGoogleDrive } = require("../utils/uploadToGoogleDrive");
 
 // get user conversation
 async function getUserConversation(req, res, next) {
@@ -30,7 +30,7 @@ async function addUser(req, res, next) {
 	if (req.files && req.files.length > 0) {
 		const auth = authenticateGoogle();
 		const avatarURL = await uploadToGoogleDrive(req.files[0], auth);
-		deleteFile(`avatar/${req.files[0].filename}`);
+		deleteFileFromLocal(`avatar/${req.files[0].filename}`);
 		newUser = new User({
 			...req.body,
 			avatar: String(avatarURL),

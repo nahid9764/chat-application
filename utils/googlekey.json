@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "neon-research-363715",
+  "private_key_id": "8938226e693e54981d216c30e21a441b600c8b58",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDSkQqyHM8AP4cq\nNk1KGU54DRp501H0ypoeICVeOA3VQLKR6csGjaccL44hxmEj0zRtZzI59JrQJegF\ngnb4jmARhJDBjPrU3f1n16/qtrhQbBZIoTVk1XMXDbsEZ5lyUZEDePOLMnJmcdml\nvXDSykK6vyaSD+Sh9DD1XvOQHmY6wKcJM59MbBIlQViUWc7hwvahFSFa2XhIXQke\n1mihYHwIktr+jLokERMLpipjhZcqzjFkIZ545lQrl2If8IzsIqdltHXwmf+FWVTz\nf9+YhkANpULj4a+zf5EiQgCZH1y0dJ5pmuswyVrkPagkot/e2XuswjgrA2nCdByS\nHHJqkdP7AgMBAAECggEAAjCuBXeVPkcVjH6Ew/OKxGbmfUPnGKkO0fy68XBF0eUF\nYSJ8ZnS3ZeynXs87GBih9U1bJrfWRbn54CzLjf71HYQyeUDnzv+sG2tmkgYVLrOh\nG7T0ODicJNjotr1ZHujy8tqhizNwIIP9+TevjRG7gJ5tCUc5tTwz/NQLASxqcHan\nBqiBCK/7JAKYoJdqlsh3G93y8vB31xbZlKDqSBdT9GRYra2jqDb0etI/Q+GKR1D0\n1CdP0wPhNWTrYaw8cJhOiF3LJX+PYRHm7pRzkCchOZrQgoSDNG/h6jWtz9MevKNi\nD3RKTasYmhiijxsKXZ9Wh0lDQIa3Rcu0MouNVDF8kQKBgQDtwTdMLGpYZSUoVT7C\nz3smvUNUwa2NihTHnR123Fk4vusnGvHt1wMf+Xvv4bjd2vesCQHvU1ej0y+OWyx7\n23+0TbALgddSmM3CXWzvx0lEGGMSDM3TTZ9C1EFQ/7zeaL6gFOe+vL8+CX1j6rlT\nBJQQnA+7H15bKYWd07keHIRT+QKBgQDiubQVloy+YrJrY0RqQnSrFh8bQWL0jHNR\nWbpa69tOaLZyqMY8ZRw1wKXgk8YnhvSiu5Zdx6fkUZj7uuUSoXGUU9uJ3ojC+FT9\n8A/g8aafS/7snZwqJ+CsqImg44TVQ4dpzJ579dRuxwIeBHv2gkDa3rPJ3LaIdYN3\nQ61cKXF8kwKBgQCFIf6u/ugF2411Clb8i2YwiSac3V8rtLhyFn6bQkQLzIys9x+l\nyRKM4w0NhF4ajTTG9rxIoWif6e/lTRSZvo3CDwaXSvuh2sLNJbeMhRF3uhgv0U+o\nFP0rVOPGUY4XFJw507r5SYPlXzcBrjxcSmIG8vy0EZqqfZO+jwJH5DwNMQKBgQC6\neHuJadn119zgf7NMJb4o3DfXRc7qTP2nQcIId4VWlr6/zNnF4G70Mq765u8JoXBg\nyyHfnY8TNJ07JLq0uP1ePh4I5XLb0Dyu4htdKcKdr3ZKC1LeRQ//UVpobdfZQwID\nXRxX3ZbLSXgPUibWVsiaeqGp+5JQ5z2qAIp7i0ZgawKBgCbJaxTa0njzsmYgfLbG\nDcD4a4SOVGhnlPUb6CpyHZf5HQuBOsq8uTlufmYYn5I1kAeRkW9I4YWX7eB903jw\neTchOCzOj+IeSvEIh8cnSiSfU2OotWbyHEvAZIFeFbmIkY1lc1X8pISocgkkALl3\nT2Kshg/6MZbd7hdL3Wy74yeC\n-----END PRIVATE KEY-----\n",
+  "client_email": "google-drive@neon-research-363715.iam.gserviceaccount.com",
+  "client_id": "117545449239297660353",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/google-drive%40neon-research-363715.iam.gserviceaccount.com"
+}

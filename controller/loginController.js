@@ -62,7 +62,7 @@ async function login(req, res, next) {
 
 function verifyUserByCookie(req, res) {
 	if (req.user) {
-		const { id, name, mobile, email, role } = req.user;
+		const { id, name, mobile, email, role, avatar } = req.user;
 		const userObj = {
 			id,
 			name,
@@ -71,7 +71,6 @@ function verifyUserByCookie(req, res) {
 			avatar,
 			role,
 		};
-
 		const token = jwt.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 		res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
 	}
