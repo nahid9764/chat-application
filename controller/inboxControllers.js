@@ -133,10 +133,8 @@ async function uploadFile(req, res, next) {
 async function deleteFile(req, res, next) {
 	if (req.params.id) {
 		try {
-			console.log("log-1");
 			const auth = authenticateGoogle();
 			const result = await deleteToGoogleDrive(req.params.id, auth);
-			console.log("last log");
 			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
 			const errors = {
