@@ -34,23 +34,13 @@ const uploadToGoogleDrive = async (file, auth) => {
 	return { filename: file.originalname, id: String(id) };
 };
 const deleteToGoogleDrive = async (fileID, auth) => {
-	console.log("nahid");
-	const fileMetadata = {
-		parents: ["1P_Jskc2WosWUJh-rqYS57JvOa07Oiuoz"], // Change it according to your desired parent folder id
-	};
-
 	const driveService = google.drive({ version: "v3", auth });
-	console.log("hossain");
 	const res = await driveService.files.delete({ fileId: fileID });
-	console.log(res);
-	// const link = `https://drive.google.com/uc?export=view&id=${id}`;
 	return res;
 };
 
 const deleteFileFromLocal = (filename) => {
-	fs.unlink(path.join(__dirname, `/../public/uploads/${filename}`), () => {
-		console.log("file deleted");
-	});
+	fs.unlink(path.join(__dirname, `/../public/uploads/${filename}`), () => {});
 };
 
 module.exports = { authenticateGoogle, uploadToGoogleDrive, deleteFileFromLocal, deleteToGoogleDrive };
