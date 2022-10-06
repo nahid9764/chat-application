@@ -130,6 +130,7 @@ async function uploadFile(req, res, next) {
 		res.status(500).json(getStandardResponse(false, "Message text or attachment is required!", { errors }));
 	}
 }
+
 async function deleteFile(req, res, next) {
 	if (req.params.id) {
 		try {
@@ -142,7 +143,7 @@ async function deleteFile(req, res, next) {
 					msg: err.message,
 				},
 			};
-			res.status(500).json(getStandardResponse(false, "An error occured!", { errors }));
+			res.status(401).json(getStandardResponse(false, err.message, { errors }));
 		}
 	} else {
 		const errors = {
@@ -156,13 +157,13 @@ async function deleteFile(req, res, next) {
 
 // send new messages
 async function sendMessage(req, res, next) {
-	if (req.body.message || (req.files && req.files.length > 0)) {
+	if (req.body.message || (req.body?.attachment && req.body?.attachment[0])) {
 		try {
 			// save message text/attachem in database
 			const newMessage = new Message({
 				conversationId: req.body.conversationId,
-				text: req.body.message,
-				attachment: attachment,
+				text: req.body?.message,
+				attachment: req.body?.attachment,
 				isSeen: false,
 				sender: {
 					id: req.user.id,

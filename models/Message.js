@@ -5,7 +5,7 @@ const messageSchema = mongoose.Schema(
 		text: {
 			type: String,
 		},
-		attachment: [{ type: String }],
+		attachment: [{ fileName: String, gDriveID: String }],
 		sender: {
 			id: mongoose.Types.ObjectId,
 			name: String,
