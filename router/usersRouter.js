@@ -13,9 +13,6 @@ const router = express.Router();
 // users page
 router.get("/conversations", checkLogin, getUserConversation);
 
-// add user
-router.post("/create-account", avatarUpload, addUserValidators, addUserValidationHandler, addUser);
-
 // search user for conversation
 router.post("/searchUser", checkLogin, searchUser);
 
