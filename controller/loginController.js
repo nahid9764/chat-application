@@ -31,6 +31,7 @@ async function login(req, res, next) {
 					mobile: user.mobile,
 					email: user.email,
 					avatar: user.avatar || null,
+					googleID: user.googleID ?? null,
 					role: "user",
 				};
 
