@@ -86,7 +86,6 @@ async function createUserByGoogle(req, res) {
 			let userObj;
 			const user = await User.findOne({ googleID: googleUser.id });
 			if (user) {
-				// userObj = { ...existUser, id: existUser._id };
 				userObj = {
 					id: user._id,
 					googleID: user.id,
