@@ -184,6 +184,13 @@ async function sendMessage(req, res, next) {
 			const user = getActiveUsers(req.body.receiverId);
 			if (user?.socketId) {
 				const r = await global.io.to(user.socketId).emit("new_message", result);
+			} else {
+				// increment unseenCount, if particepent not active
+				const doc = await Conversation.findById(req.body.conversationId);
+				await Conversation.updateOne(
+					{ _id: req.body.conversationId },
+					{ $set: { unseenMsgCount: doc.unseenMsgCount + 1 } }
+				);
 			}
 			res.status(200).json(getStandardResponse(true, "", result));
 		} catch (err) {
