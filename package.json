@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "Nahid Hossain Node.js Chat Application",
 	"main": "app.js",
+	"engines": {
+		"node": "16.14.2"
+	},
 	"scripts": {
 		"start": "NODE_ENV=production node app.js"
 	},
