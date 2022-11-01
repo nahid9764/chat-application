@@ -9,13 +9,13 @@ const {
 	verifyUserByCookie,
 	createUserByGoogle,
 	createGoogleAuthURL,
-} = require("../controller/loginController");
-const decorateHtmlRes = require("../middleware/common/decorateHtmlRes");
-const { loginValidators, loginValidationHandler } = require("../middleware/login/loginValidators");
-const { checkLogin } = require("../middleware/common/checkLogin");
-const avatarUpload = require("../middleware/user/avatarUpload");
-const { addUserValidators, addUserValidationHandler } = require("../middleware/user/userValidator");
-const { addUser } = require("../controller/usersControllers");
+} = require("../controller/login_controller");
+const decorateHtmlRes = require("../middleware/common/decorate_html_res");
+const { loginValidators, loginValidationHandler } = require("../middleware/login/login_validators");
+const { checkLogin } = require("../middleware/common/check_login");
+const avatarUpload = require("../middleware/user/avatar_upload");
+const { addUserValidators, addUserValidationHandler } = require("../middleware/user/user_validator");
+const { addUser } = require("../controller/users_controllers");
 
 const router = express.Router();
 

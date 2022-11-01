@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const { getStandardResponse } = require("../utils/helpers");
-const { getGoogleAuthURL, getGoogleUser } = require("../utils/looginWithGoogle");
+const { getGoogleAuthURL, getGoogleUser } = require("../utils/loogin_with_google");
 const { response } = require("express");
 
 // get login page

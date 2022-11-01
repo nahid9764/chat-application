@@ -1,5 +1,5 @@
 const { getStandardResponse } = require("../../utils/helpers");
-const uploader = require("../../utils/singleUploader");
+const uploader = require("../../utils/single_uploader");
 
 function avatarUpload(req, res, next) {
 	const upload = uploader(

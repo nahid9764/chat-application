@@ -8,10 +8,10 @@ const http = require("http");
 const cors = require("cors");
 
 // internal imports
-const { notFroundHandler, errorHanlder } = require("./middleware/common/errorHandler");
-const logInRouter = require("./router/loginRouter");
-const usersRouter = require("./router/usersRouter");
-const inboxRouter = require("./router/inboxRouter");
+const { notFroundHandler, errorHanlder } = require("./middleware/common/error_handler");
+const logInRouter = require("./router/login_router");
+const usersRouter = require("./router/users_router");
+const inboxRouter = require("./router/inbox_router");
 const { startSocket } = require("./socket");
 
 const app = express();

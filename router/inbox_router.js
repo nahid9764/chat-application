@@ -10,11 +10,11 @@ const {
 	updateSeenUnseen,
 	uploadFile,
 	deleteFile,
-} = require("../controller/inboxControllers");
-const { checkLogin } = require("../middleware/common/checkLogin");
-const decorateHtmlRes = require("../middleware/common/decorateHtmlRes");
-const attachmentUpload = require("../middleware/inbox/attachmentUpload");
-const { updateSeenValidator, updateSeenValidatorHandler } = require("../middleware/inbox/updateSeenValidators");
+} = require("../controller/inbox_controllers");
+const { checkLogin } = require("../middleware/common/check_login");
+const decorateHtmlRes = require("../middleware/common/decorate_html_res");
+const attachmentUpload = require("../middleware/inbox/attachment_upload");
+const { updateSeenValidator, updateSeenValidatorHandler } = require("../middleware/inbox/update_seen_validators");
 
 const router = express.Router();
 

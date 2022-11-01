@@ -1,14 +1,14 @@
 const { mongo } = require("mongoose");
 const Conversation = require("../models/conversation");
 const Message = require("../models/message");
-const { getActiveUsers } = require("../utils/activeUsers");
+const { getActiveUsers } = require("../utils/active_users");
 const { getStandardResponse, generateConversationId } = require("../utils/helpers");
 const {
 	uploadToGoogleDrive,
 	authenticateGoogle,
 	deleteFileFromLocal,
 	deleteToGoogleDrive,
-} = require("../utils/uploadToGoogleDrive");
+} = require("../utils/upload_to_google_drive");
 
 // get inbox page
 async function getConversationLists(req, res, next) {

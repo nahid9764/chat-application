@@ -1,5 +1,5 @@
 const { getStandardResponse } = require("../../utils/helpers");
-const uploader = require("../../utils/multipleUploader");
+const uploader = require("../../utils/multiple_uploader");
 
 function attachmentUpload(req, res, next) {
 	const upload = uploader(
