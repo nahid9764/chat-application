@@ -4,10 +4,10 @@ const { unlink } = require("fs");
 const path = require("path");
 
 // internal imports
-const User = require("../models/People");
+const User = require("../models/people");
 const createHttpError = require("http-errors");
 const { escape, getStandardResponse } = require("../utils/helpers");
-const Conversation = require("../models/Conversation");
+const Conversation = require("../models/conversation");
 const { authenticateGoogle, deleteFileFromLocal, uploadToGoogleDrive } = require("../utils/uploadToGoogleDrive");
 
 // get user conversation

@@ -5,7 +5,7 @@ const path = require("path");
 const { unlink } = require("fs");
 
 //internal imports
-const User = require("../../models/People");
+const User = require("../../models/people");
 const { getStandardResponse } = require("../../utils/helpers");
 
 // add user

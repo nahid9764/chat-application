@@ -1,5 +1,5 @@
 // internal imports
-const User = require("../models/People");
+const User = require("../models/people");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");

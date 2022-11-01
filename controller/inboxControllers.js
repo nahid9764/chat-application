@@ -1,6 +1,6 @@
 const { mongo } = require("mongoose");
-const Conversation = require("../models/Conversation");
-const Message = require("../models/Message");
+const Conversation = require("../models/conversation");
+const Message = require("../models/message");
 const { getActiveUsers } = require("../utils/activeUsers");
 const { getStandardResponse, generateConversationId } = require("../utils/helpers");
 const {
