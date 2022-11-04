@@ -1,11 +1,12 @@
 // internal imports
-const User = require("../models/people");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const { getStandardResponse } = require("../utils/helpers");
 const { getGoogleAuthURL, getGoogleUser } = require("../utils/loogin_with_google");
 const { response } = require("express");
+const User = require("../models/people");
 
 // get login page
 function getLogin(req, res, next) {
@@ -16,6 +17,7 @@ function getLogin(req, res, next) {
 async function login(req, res, next) {
 	try {
 		// find a user who has this email/username
+
 		const user = await User.findOne({
 			$or: [{ email: req.body.username }, { mobile: req.body.username }],
 		});

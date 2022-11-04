@@ -34,6 +34,6 @@ const peopleSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
-const People = mongoose.model("People", peopleSchema);
+const User = mongoose.model("User", peopleSchema);
 
-module.exports = People;
+module.exports = User;
