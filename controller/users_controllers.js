@@ -7,7 +7,7 @@ const path = require("path");
 const User = require("../models/People");
 const createHttpError = require("http-errors");
 const { escape, getStandardResponse } = require("../utils/helpers");
-const Conversation = require("../models/conversation");
+const Conversation = require("../models/Conversation");
 const { authenticateGoogle, deleteFileFromLocal, uploadToGoogleDrive } = require("../utils/upload_to_google_drive");
 
 // get user conversation
