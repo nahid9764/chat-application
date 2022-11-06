@@ -1,5 +1,5 @@
 const { Server } = require("socket.io");
-const { addToActiveUsers, getActiveUsers, removeFromActiveUser } = require("./utils/activeUsers");
+const { addToActiveUsers, getActiveUsers, removeFromActiveUser } = require("./utils/active_users");
 
 function startSocket(httpServer) {
 	const io = new Server(httpServer, {
