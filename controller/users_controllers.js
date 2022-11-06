@@ -4,7 +4,7 @@ const { unlink } = require("fs");
 const path = require("path");
 
 // internal imports
-const User = require("../models/people");
+const User = require("../models/People");
 const createHttpError = require("http-errors");
 const { escape, getStandardResponse } = require("../utils/helpers");
 const Conversation = require("../models/conversation");
