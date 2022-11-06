@@ -6,7 +6,7 @@ const createError = require("http-errors");
 const { getStandardResponse } = require("../utils/helpers");
 const { getGoogleAuthURL, getGoogleUser } = require("../utils/loogin_with_google");
 const { response } = require("express");
-const User = require("/models/people");
+const User = require("../models/people.js");
 
 // get login page
 function getLogin(req, res, next) {
