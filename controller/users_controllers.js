@@ -5,7 +5,7 @@ const path = require("path");
 
 // internal imports
 const User = require("../models/People");
-const Conversation = require("../models/Conversation");
+const Conversation = require("../models/Conversations");
 const createHttpError = require("http-errors");
 const { escape, getStandardResponse } = require("../utils/helpers");
 const { authenticateGoogle, deleteFileFromLocal, uploadToGoogleDrive } = require("../utils/upload_to_google_drive");
