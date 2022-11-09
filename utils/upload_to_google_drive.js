@@ -4,7 +4,7 @@ const path = require("path");
 
 const authenticateGoogle = () => {
 	const auth = new google.auth.GoogleAuth({
-		keyFile: `${__dirname}/googlekey.json`,
+		keyFile: `../googlekey.json`,
 		// credentials: JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS),
 		scopes: "https://www.googleapis.com/auth/drive",
 	});
