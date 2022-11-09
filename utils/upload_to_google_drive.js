@@ -11,7 +11,7 @@ const authenticateGoogle = () => {
 	return auth;
 };
 
-const uploadToGoogleDrive = async (file, auth) => {
+const uploadToGoogleDrive = async (file, auth, onlyViewLink = false) => {
 	const fileMetadata = {
 		name: file.originalname,
 		parents: ["1P_Jskc2WosWUJh-rqYS57JvOa07Oiuoz"], // Change it according to your desired parent folder id
@@ -32,6 +32,9 @@ const uploadToGoogleDrive = async (file, auth) => {
 		fields: "id",
 	});
 	const link = `https://drive.google.com/uc?export=view&id=${id}`;
+
+	if (onlyViewLink) return link;
+
 	return { filename: file.originalname, id: String(id) };
 };
 const deleteToGoogleDrive = async (fileID, auth) => {

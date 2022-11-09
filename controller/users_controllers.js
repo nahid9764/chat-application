@@ -29,7 +29,7 @@ async function addUser(req, res, next) {
 
 	if (req.files && req.files.length > 0) {
 		const auth = authenticateGoogle();
-		const avatarURL = await uploadToGoogleDrive(req.files[0], auth);
+		const avatarURL = await uploadToGoogleDrive(req.files[0], auth, true);
 		deleteFileFromLocal(`avatar/${req.files[0].filename}`);
 		newUser = new User({
 			...req.body,
