@@ -100,16 +100,17 @@ async function createUserByGoogle(req, res) {
 				};
 			} else {
 				try {
-					userObj = new User({
+					userObj = {
 						googleID: googleUser.id,
 						name: `${googleUser?.given_name} ${googleUser?.family_name}`,
 						mobile: null,
 						email: googleUser?.email ?? null,
 						avatar: googleUser?.picture ?? null,
 						role: "user",
-					});
-					// save user or send error
-					userObj = await userObj.save();
+					};
+					// save user
+					const u = await new User(userObj).save();
+					userObj.id = u._id;
 				} catch (err) {
 					const errors = {
 						common: {
@@ -121,14 +122,23 @@ async function createUserByGoogle(req, res) {
 			}
 
 			// generate token
-			const token = jwt.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
-			// set cookie
-			res.cookie(process.env.COOKIE_NAME, token, {
-				maxAge: process.env.JWT_EXPIRY,
-				httpOnly: true,
-				signed: true,
-			});
-			res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
+			try {
+				const token = jwt.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
+				// set cookie
+				res.cookie(process.env.COOKIE_NAME, token, {
+					maxAge: process.env.JWT_EXPIRY,
+					httpOnly: true,
+					signed: true,
+				});
+				res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
+			} catch (error) {
+				const errors = {
+					common: {
+						msg: error.message,
+					},
+				};
+				res.status(500).json(getStandardResponse(false, "Internal Server error!", { errors }));
+			}
 		}
 	}
 
