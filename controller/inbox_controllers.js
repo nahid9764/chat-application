@@ -114,6 +114,11 @@ async function uploadFile(req, res, next) {
 				res.status(200).json(getStandardResponse(true, "", fileIds));
 			}
 		} catch (err) {
+			try {
+				deleteFileFromLocal(`attachments/${req.files[i].filename}`);
+			} catch (err) {
+				console.log(err);
+			}
 			const errors = {
 				common: {
 					msg: err.message,

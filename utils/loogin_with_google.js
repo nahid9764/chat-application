@@ -1,23 +1,24 @@
 const { default: fetch } = require("cross-fetch");
 const { google } = require("googleapis");
-const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const oauth2Client = new google.auth.OAuth2({
-	clientId: "1060202304069-h9or95mi7qenfpgsvhul83546fik8nuh.apps.googleusercontent.com",
-	clientSecret: "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",
-	redirectUri: "http://localhost:3000/login",
+	clientId: process.env.GOOGLE_CLIENT_ID,
+	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+	redirectUri: process.env.GOOGLE_AUTH_REDIRECT_URI,
 });
 
 async function getGoogleAuthURL() {
 	// Generate a url that asks permissions to the user's email and profile
-
 	const scopes = [
 		"https://www.googleapis.com/auth/userinfo.profile",
 		"https://www.googleapis.com/auth/userinfo.email",
 	];
 
 	const url = await oauth2Client.generateAuthUrl({
-		redirect_uri: "http://localhost:3000/login",
+		redirect_uri: process.env.GOOGLE_AUTH_REDIRECT_URI,
 		access_type: "offline",
 		prompt: "consent",
 		scope: scopes,

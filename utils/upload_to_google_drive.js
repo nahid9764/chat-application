@@ -1,11 +1,13 @@
 const { google } = require("googleapis");
 const fs = require("fs");
 const path = require("path");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const authenticateGoogle = () => {
 	const auth = new google.auth.GoogleAuth({
-		keyFile: `../googlekey.json`,
-		// credentials: JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS),
+		keyFilename: "googlekey.json",
 		scopes: "https://www.googleapis.com/auth/drive",
 	});
 	return auth;
@@ -14,7 +16,7 @@ const authenticateGoogle = () => {
 const uploadToGoogleDrive = async (file, auth, onlyViewLink = false) => {
 	const fileMetadata = {
 		name: file.originalname,
-		parents: ["1P_Jskc2WosWUJh-rqYS57JvOa07Oiuoz"], // Change it according to your desired parent folder id
+		parents: [process.env.GOOGLE_DRIVE_FOLDER_ID], // Change it according to your desired parent folder id
 	};
 
 	const media = {
@@ -31,8 +33,8 @@ const uploadToGoogleDrive = async (file, auth, onlyViewLink = false) => {
 		media: media,
 		fields: "id",
 	});
-	const link = `https://drive.google.com/uc?export=view&id=${id}`;
 
+	const link = `${process.env.GOOGLE_DRIVE_IMG_VIEW_LINK}${id}`;
 	if (onlyViewLink) return link;
 
 	return { filename: file.originalname, id: String(id) };
@@ -44,7 +46,9 @@ const deleteToGoogleDrive = async (fileID, auth) => {
 };
 
 const deleteFileFromLocal = (filename) => {
-	fs.unlink(path.join(__dirname, `/../public/uploads/${filename}`), () => {});
+	fs.unlink(path.join(__dirname, `/../public/uploads/${filename}`), () => {
+		console.log("file deleted");
+	});
 };
 
 module.exports = { authenticateGoogle, uploadToGoogleDrive, deleteFileFromLocal, deleteToGoogleDrive };
