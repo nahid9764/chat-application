@@ -1,10 +1,12 @@
 const { Server } = require("socket.io");
 const { addToActiveUsers, getActiveUsers, removeFromActiveUser } = require("./utils/active_users");
+const dotenv = require("dotenv");
+dotenv.config();
 
 function startSocket(httpServer) {
 	const io = new Server(httpServer, {
 		cors: {
-			origin: "http://localhost:3000",
+			origin: process.env.FRONT_END_URL,
 			methods: ["GET", "POST"],
 		},
 	});
