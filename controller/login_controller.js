@@ -10,7 +10,9 @@ const User = require("../models/People");
 
 // get login page
 function getLogin(req, res, next) {
-	res.render("index");
+	const data = "Server started successfully!";
+
+	res.status(200).json(getStandardResponse(true, "", data));
 }
 
 // login controller

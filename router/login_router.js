@@ -20,7 +20,7 @@ const { addUser } = require("../controller/users_controllers");
 const router = express.Router();
 
 // login page
-router.get("/", decorateHtmlRes("Login"), getLogin);
+router.get("/", getLogin);
 
 // register user
 router.post("/create-account", avatarUpload, addUserValidators, addUserValidationHandler, addUser);
