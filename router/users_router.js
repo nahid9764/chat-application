@@ -2,11 +2,8 @@
 const express = require("express");
 
 //internal import
-const { getUserConversation, addUser, deleteUser, searchUser } = require("../controller/users_controllers");
+const { getUserConversation, deleteUser, searchUser } = require("../controller/users_controllers");
 const { checkLogin } = require("../middleware/common/check_login");
-const decorateHtmlRes = require("../middleware/common/decorate_html_res");
-const avatarUpload = require("../middleware/user/avatar_upload");
-const { addUserValidators, addUserValidationHandler } = require("../middleware/user/user_validator");
 
 const router = express.Router();
 

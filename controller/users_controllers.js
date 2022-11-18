@@ -2,6 +2,7 @@
 const bcrypt = require("bcrypt");
 const { unlink } = require("fs");
 const path = require("path");
+const jwt = require("jsonwebtoken");
 
 // internal imports
 const User = require("../models/People");
@@ -46,8 +47,28 @@ async function addUser(req, res, next) {
 	// save user or send error
 	try {
 		await newUser.save();
-		delete newUser.password;
-		res.status(200).json(getStandardResponse(true, "User added successfully!", newUser));
+
+		const userObj = {
+			id: newUser._id,
+			name: newUser.name,
+			email: newUser.email,
+			avatar: newUser.avatar || null,
+			googleID: newUser.googleID ?? null,
+			role: "user",
+		};
+
+		// res.status(200).json(getStandardResponse(true, "User added successfully!", newUser));
+		// generate token
+		const token = jwt.sign(userObj, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
+		// set cookie
+		res.cookie(process.env.COOKIE_NAME, token, {
+			maxAge: process.env.JWT_EXPIRY,
+			httpOnly: true,
+			signed: true,
+		});
+
+		// set logged in user local identifier
+		res.status(200).json(getStandardResponse(true, "", { ...userObj, token }));
 	} catch (err) {
 		const errors = {
 			common: {
@@ -64,7 +85,7 @@ async function searchUser(req, res, next) {
 	const searchQuery = user.replace("+88", "");
 
 	const name_search_regex = new RegExp(escape(searchQuery), "i");
-	const mobile_search_regex = new RegExp("^" + escape("+88" + searchQuery));
+	// const mobile_search_regex = new RegExp("^" + escape("+88" + searchQuery));
 	const email_search_regex = new RegExp("^" + escape("+88" + searchQuery) + "$", "i");
 
 	try {
@@ -75,9 +96,9 @@ async function searchUser(req, res, next) {
 						{
 							name: name_search_regex,
 						},
-						{
-							mobile: mobile_search_regex,
-						},
+						// {
+						// 	mobile: mobile_search_regex,
+						// },
 						{
 							email: email_search_regex,
 						},

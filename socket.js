@@ -18,7 +18,6 @@ function startSocket(httpServer) {
 		//take userId and socketId from user
 		socket.on("addToActiveUsers", (userId) => {
 			addToActiveUsers(userId, socket.id);
-			console.log({ activeUser: global.activeUser });
 			io.emit("getActiveUsers", global.activeUser);
 		});
 		socket.on("disconnect", () => {

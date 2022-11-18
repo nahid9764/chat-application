@@ -6,13 +6,13 @@ const path = require("path");
 const cookiesPareser = require("cookie-parser");
 const http = require("http");
 const cors = require("cors");
-
 // internal imports
 const { notFroundHandler, errorHanlder } = require("./middleware/common/error_handler");
 const logInRouter = require("./router/login_router");
 const usersRouter = require("./router/users_router");
 const inboxRouter = require("./router/inbox_router");
 const { startSocket } = require("./socket");
+const { swaggerDocs } = require("./utils/swagger");
 
 const app = express();
 app.use(cors());
@@ -48,6 +48,7 @@ app.use(cookiesPareser(process.env.COOKIE_SECRET));
 app.use("/", logInRouter);
 app.use("/users", usersRouter);
 app.use("/inbox", inboxRouter);
+swaggerDocs(app);
 
 // 404 not found handler
 app.use(notFroundHandler);
