@@ -6,13 +6,13 @@ const conversationSchema = mongoose.Schema(
 			id: mongoose.Types.ObjectId,
 			name: String,
 			avatar: String,
-			mobile: String,
+			// mobile: String,
 		},
 		participant: {
 			id: mongoose.Types.ObjectId,
 			name: String,
 			avatar: String,
-			mobile: String,
+			// mobile: String,
 		},
 		unseenMsgCount: {
 			type: Number,

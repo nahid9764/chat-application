@@ -32,7 +32,7 @@ async function login(req, res, next) {
 				const userObj = {
 					id: user._id,
 					name: user.name,
-					mobile: user.mobile,
+					// mobile: user.mobile,
 					email: user.email,
 					avatar: user.avatar || null,
 					googleID: user.googleID ?? null,
@@ -95,7 +95,7 @@ async function createUserByGoogle(req, res) {
 					id: user._id,
 					googleID: user.id,
 					name: user.name,
-					mobile: user.mobile,
+					// mobile: user.mobile,
 					email: user.email,
 					avatar: user.avatar || null,
 					role: "user",
@@ -105,7 +105,7 @@ async function createUserByGoogle(req, res) {
 					userObj = {
 						googleID: googleUser.id,
 						name: `${googleUser?.given_name} ${googleUser?.family_name}`,
-						mobile: null,
+						// mobile: null,
 						email: googleUser?.email ?? null,
 						avatar: googleUser?.picture ?? null,
 						role: "user",
@@ -162,11 +162,12 @@ async function createUserByGoogle(req, res) {
 
 function verifyUserByCookie(req, res) {
 	if (req.user) {
-		const { id, name, mobile, email, role, avatar } = req.user;
+		// mobile,
+		const { id, name, email, role, avatar } = req.user;
 		const userObj = {
 			id,
 			name,
-			mobile,
+			// mobile,
 			email,
 			avatar,
 			role,

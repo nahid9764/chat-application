@@ -43,14 +43,14 @@ async function addConversation(req, res, next) {
 					creator: {
 						id: req.user.id,
 						name: req.user.name,
-						mobile: req.user.mobile,
+						// mobile: req.user.mobile,
 						avatar: req.user.avatar || null,
 					},
 					lastSenderId: req.user.id,
 					participant: {
 						id: req.body.id,
 						name: req.body.name,
-						mobile: req.body.mobile,
+						// mobile: req.body.mobile,
 						avatar: req.body.avatar || null,
 					},
 					unseenMsgCount: 0,

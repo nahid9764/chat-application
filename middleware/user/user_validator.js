@@ -30,27 +30,21 @@ const addUserValidators = [
 				throw createError(err.message);
 			}
 		}),
-	check("mobile")
-		.isMobilePhone("bn-BD", {
-			strictMode: true,
-		})
-		.withMessage("Moblie number must be a valid Bangladeshi number!")
-		.custom(async (value) => {
-			try {
-				const user = await User.findOne({ mobile: value });
-				if (user) {
-					throw createError("Mobile already is use!");
-				}
-			} catch (err) {
-				throw createError(err.message);
-			}
-		}),
+	// check("mobile")
+	// 	.isMobilePhone()
+	// 	.withMessage("Moblie number must be a valid Bangladeshi number!")
+	// 	.custom(async (value) => {
+	// 		try {
+	// 			const user = await User.findOne({ mobile: value });
+	// 			if (user) {
+	// 				throw createError("Mobile already is use!");
+	// 			}
+	// 		} catch (err) {
+	// 			throw createError(err.message);
+	// 		}
+	// 	}),
 
-	check("password")
-		.isStrongPassword()
-		.withMessage(
-			"Password must be at least * characters long & should contain at least 1 lowercase, 1 uppercase, 1 number & 1 symbol"
-		),
+	check("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long!"),
 ];
 
 const addUserValidationHandler = (req, res, next) => {
